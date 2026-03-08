@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cowork</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #f9f9f5;
+  --bg2: #f2f2ec;
+  --white: #ffffff;
+  --border: #e8e8e2;
+  --border2: #efefea;
+  --t1: #1a1a1a;
+  --t2: #6b6b6b;
+  --t3: #aaaaaa;
+  --accent: #d14c3e;
+  --accent-bg: #f5e8e6;
+  --tag: #efefea;
+  --tag-a-bg: #f0ddd9;
+  --tag-a-c: #c04438;
+  --grid: rgba(0,0,0,0.042);
+  --sh1: 0 1px 4px rgba(0,0,0,0.07);
+  --sh2: 0 4px 16px rgba(0,0,0,0.1);
+}
+body {
+  font-family: -apple-system,'Hiragino Sans','Hiragino Kaku Gothic ProN','Yu Gothic UI',sans-serif;
+  background: var(--bg); color: var(--t1);
+  height: 100vh; overflow: hidden;
+  display: flex; flex-direction: column;
+  font-size: 14px; -webkit-font-smoothing: antialiased;
+}
+.grid-bg {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image: linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* TITLEBAR */
+.tb {
+  position: relative; z-index: 10;
+  height: 44px; background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; padding: 0 12px; gap: 4px; flex-shrink: 0;
+}
+.tb-ib {
+  width: 28px; height: 28px; border: none; background: none; cursor: pointer;
+  color: var(--t2); border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+}
+.tb-ib:hover { background: var(--border); }
+.tb-ib svg { width: 15px; height: 15px; }
+.tb-tabs {
+  display: flex; gap: 1px;
+  background: var(--border); border-radius: 9px; padding: 2px;
+  margin: 0 auto;
+}
+.tb-tab {
+  padding: 4px 18px; border-radius: 7px;
+  font-size: 13px; font-weight: 500;
+  border: none; cursor: pointer; font-family: inherit;
+  color: var(--t2); background: none; transition: all 0.12s;
+}
+.tb-tab.on { background: #e8967e; color: #fff; }
+.tb-tab:hover:not(.on) { color: var(--t1); }
+.tb-right { display: flex; gap: 3px; }
+.win-b {
+  width: 22px; height: 22px; border: none; background: none;
+  cursor: pointer; color: var(--t2); border-radius: 4px; font-size: 12px;
+  display: flex; align-items: center; justify-content: center;
+}
+.win-b:hover { background: var(--border); }
+
+/* APP */
+.app { display: flex; flex: 1; overflow: hidden; position: relative; z-index: 1; }
+
+/* SIDEBAR */
+.sb {
+  width: 48px; flex-shrink: 0;
+  background: var(--bg2); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; align-items: center;
+  padding: 10px 0 12px; gap: 2px;
+}
+.sb-b {
+  width: 36px; height: 36px; border: none; background: none;
+  cursor: pointer; border-radius: 8px; color: var(--t2);
+  display: flex; align-items: center; justify-content: center; transition: all 0.1s;
+}
+.sb-b:hover { background: var(--border); }
+.sb-b svg { width: 16px; height: 16px; }
+.sb-sp { flex: 1; }
+
+/* SCREEN WRAP */
+.sw { flex: 1; overflow: hidden; position: relative; }
+
+/* ── SCREEN 1 ── */
+#s1 { height: 100%; overflow-y: auto; }
+#s1::-webkit-scrollbar { width: 0; }
+.s1-in { max-width: 660px; margin: 0 auto; padding: 52px 36px 60px; }
+
+.s1-h1 { font-size: 30px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; line-height: 1.2; }
+.s1-sub { font-size: 13px; color: var(--t2); margin-bottom: 30px; line-height: 1.5; }
+.s1-sub a { color: var(--t2); text-decoration: underline; }
+
+/* Input box */
+.ibox {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 18px; padding: 16px 18px 13px;
+  box-shadow: var(--sh1); margin-bottom: 38px;
+}
+.ita {
+  width: 100%; border: none; outline: none;
+  font-size: 14px; font-family: inherit;
+  color: var(--t1); background: transparent;
+  resize: none; min-height: 22px; line-height: 1.55;
+  display: block; margin-bottom: 13px;
+}
+.ita::placeholder { color: var(--t3); }
+.ifoot { display: flex; align-items: center; gap: 7px; }
+.folder-b {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 13px; color: var(--t2);
+  border: none; background: none; cursor: pointer; font-family: inherit;
+}
+.folder-b svg { width: 13px; height: 13px; }
+.idiv { width: 1px; height: 14px; background: var(--border); margin: 0 2px; }
+.plus-b {
+  width: 24px; height: 24px; border: none; background: none;
+  cursor: pointer; border-radius: 6px; color: var(--t2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 19px; line-height: 1;
+}
+.plus-b:hover { background: var(--border); }
+.model-b {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 3px;
+  font-size: 13px; color: var(--t2);
+  border: none; background: none; cursor: pointer; font-family: inherit;
+}
+.model-b svg { width: 11px; height: 11px; }
+.start-b {
+  background: #e8967e; color: #fff;
+  border: none; border-radius: 10px;
+  padding: 6px 15px; font-size: 13px; font-weight: 600;
+  cursor: pointer; font-family: inherit;
+  display: flex; align-items: center; gap: 5px; transition: background 0.12s;
+}
+.start-b:hover { background: #d4836b; }
+.start-b svg { width: 12px; height: 12px; }
+
+/* Section */
+.sec-h { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.sec-l { font-size: 12px; font-weight: 500; color: var(--t2); }
+.sec-cl { font-size: 12px; color: var(--t2); border: none; background: none; cursor: pointer; font-family: inherit; }
+.sec-cl:hover { color: var(--t1); }
+
+.t-row {
+  display: flex; align-items: center; gap: 13px;
+  padding: 10px 4px; border-bottom: 1px solid var(--border2);
+  cursor: pointer; border-radius: 7px; transition: background 0.1s;
+}
+.t-row:hover { background: rgba(0,0,0,0.018); }
+.t-ico {
+  width: 34px; height: 34px; flex-shrink: 0;
+  border-radius: 50%; background: var(--tag);
+  display: flex; align-items: center; justify-content: center;
+}
+.t-ico svg { width: 15px; height: 15px; color: var(--t2); }
+.t-name { font-size: 14px; color: var(--t1); }
+.t-time { font-size: 12px; color: var(--t3); margin-top: 1px; }
+
+.rand-row {
+  display: flex; align-items: center; gap: 9px;
+  padding: 12px 4px; border-bottom: 1px solid var(--border2);
+  color: var(--t2); font-size: 13.5px;
+}
+.rand-row svg { width: 15px; height: 15px; }
+
+.sg-row {
+  display: flex; align-items: center; gap: 13px;
+  padding: 10px 4px; border-bottom: 1px solid var(--border2);
+  cursor: pointer; border-radius: 7px; transition: background 0.1s;
+}
+.sg-row:hover { background: rgba(0,0,0,0.018); }
+.sg-ico {
+  width: 36px; height: 36px; flex-shrink: 0;
+  border-radius: 9px; background: var(--tag);
+  display: flex; align-items: center; justify-content: center;
+}
+.sg-ico svg { width: 17px; height: 17px; color: var(--t2); }
+.sg-name { font-size: 14px; color: var(--t1); }
+.plug-l { margin-top: 18px; padding: 0 4px; font-size: 13px; color: var(--t2); }
+
+/* ── SCREEN 2 ── */
+#s2 { height: 100%; display: none; flex-direction: row; }
+
+/* Chat */
+.cp {
+  width: 48%; flex-shrink: 0;
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  background: var(--bg); overflow: hidden;
+}
+.cp-h {
+  flex-shrink: 0; padding: 11px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 5px;
+  font-size: 14px; font-weight: 600;
+}
+.cp-h svg { width: 11px; height: 11px; color: var(--t3); }
+
+.cp-body {
+  flex: 1; overflow-y: auto; padding: 18px 18px 10px;
+  display: flex; flex-direction: column;
+}
+.cp-body::-webkit-scrollbar { width: 4px; }
+.cp-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+.mu {
+  align-self: flex-end; max-width: 78%;
+  background: var(--tag); border-radius: 13px 13px 3px 13px;
+  padding: 9px 13px; font-size: 14px; line-height: 1.55;
+  margin-bottom: 18px;
+}
+
+.ma-link {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 12px; color: var(--t3); cursor: pointer;
+  border: none; background: none; font-family: inherit;
+  margin-bottom: 8px; padding: 0;
+}
+.ma-link:hover { color: var(--t2); }
+.ma-link svg { width: 11px; height: 11px; }
+.ma-text {
+  font-size: 14px; line-height: 1.68; margin-bottom: 12px;
+}
+.ma-text p { margin-bottom: 7px; }
+.ma-text p:last-child { margin-bottom: 0; }
+.ma-text ul { padding-left: 18px; margin: 6px 0; }
+.ma-text li { margin-bottom: 4px; }
+.ct { background: #eee; color: #555; border-radius: 4px; padding: 1px 5px; font-family: 'SF Mono','Menlo',monospace; font-size: 12px; }
+.ma-acts { display: flex; gap: 6px; margin-bottom: 14px; }
+.ma-ab {
+  width: 28px; height: 28px; border-radius: 6px;
+  border: none; background: none; cursor: pointer; color: var(--t3);
+  display: flex; align-items: center; justify-content: center; transition: all 0.1s;
+}
+.ma-ab:hover { background: var(--border); color: var(--t2); }
+.ma-ab svg { width: 14px; height: 14px; }
+
+.scroll-dn {
+  position: absolute; left: 24%; bottom: 136px; transform: translateX(-50%);
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--white); border: 1px solid var(--border);
+  box-shadow: var(--sh1); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; color: var(--t2);
+  transition: opacity 0.2s; z-index: 5;
+}
+.scroll-dn:hover { background: var(--bg2); }
+.scroll-dn svg { width: 13px; height: 13px; }
+
+.ci { flex-shrink: 0; padding: 9px 13px 7px; border-top: 1px solid var(--border); }
+.ci-box {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 13px; padding: 9px 13px 8px; box-shadow: var(--sh1);
+}
+.ci-ta {
+  width: 100%; border: none; outline: none;
+  font-size: 14px; font-family: inherit; color: var(--t1);
+  background: transparent; resize: none; min-height: 20px; line-height: 1.5;
+  display: block; margin-bottom: 8px;
+}
+.ci-ta::placeholder { color: var(--t3); }
+.ci-foot { display: flex; align-items: center; gap: 7px; }
+.ci-plus {
+  width: 24px; height: 24px; border-radius: 6px; border: none;
+  background: none; cursor: pointer; color: var(--t2); font-size: 19px;
+  display: flex; align-items: center; justify-content: center;
+}
+.ci-plus:hover { background: var(--border); }
+.ci-model {
+  font-size: 13px; color: var(--t2); border: none;
+  background: none; cursor: pointer; font-family: inherit;
+  display: flex; align-items: center; gap: 3px;
+}
+.ci-model svg { width: 11px; height: 11px; }
+.ci-send {
+  margin-left: auto; width: 30px; height: 30px;
+  border-radius: 8px; background: var(--accent); border: none;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background 0.12s;
+}
+.ci-send:hover { background: #ba3e31; }
+.ci-send svg { width: 13px; height: 13px; color: #fff; }
+.ci-disc { font-size: 11px; color: var(--t3); text-align: center; margin-top: 7px; line-height: 1.4; }
+
+/* Preview */
+.pp { flex: 1; display: flex; flex-direction: column; background: var(--white); overflow: hidden; }
+.pp-h {
+  flex-shrink: 0; padding: 7px 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 5px;
+  background: var(--bg);
+}
+.pp-tg { background: var(--border); border-radius: 7px; padding: 2px; display: flex; gap: 1px; }
+.pp-t {
+  width: 28px; height: 24px; border-radius: 5px; border: none;
+  background: none; cursor: pointer; color: var(--t2);
+  display: flex; align-items: center; justify-content: center; transition: all 0.1s;
+}
+.pp-t.on { background: var(--white); color: var(--t1); }
+.pp-t svg { width: 13px; height: 13px; }
+.pp-r { margin-left: auto; display: flex; align-items: center; gap: 3px; }
+.pp-b {
+  width: 26px; height: 26px; border-radius: 6px; border: none;
+  background: none; cursor: pointer; color: var(--t2);
+  display: flex; align-items: center; justify-content: center; transition: background 0.1s;
+}
+.pp-b:hover { background: var(--border); }
+.pp-b svg { width: 13px; height: 13px; }
+.chr-b {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 12px; color: var(--t2);
+  border: none; background: none; cursor: pointer; font-family: inherit;
+  padding: 3px 7px; border-radius: 6px; transition: background 0.1s;
+}
+.chr-b:hover { background: var(--border); }
+.chr-ic {
+  width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0;
+  background: conic-gradient(#4285f4 0 90deg,#ea4335 90deg 180deg,#fbbc05 180deg 270deg,#34a853 270deg 360deg);
+}
+
+/* MEISHI */
+.mw { flex: 1; overflow-y: auto; padding: 18px 22px; }
+.mw::-webkit-scrollbar { width: 4px; }
+.mw::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+.m-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.m-logo {
+  display: flex; align-items: center; gap: 9px;
+  font-size: 19px; font-weight: 800; letter-spacing: -0.4px;
+}
+.m-logo-ic {
+  width: 32px; height: 32px; border-radius: 8px; background: #e07060;
+  display: flex; align-items: center; justify-content: center;
+}
+.m-logo-ic svg { width: 15px; height: 15px; color: #fff; }
+.m-meta { font-size: 12px; color: var(--t2); }
+
+.m-tabs { display: flex; border-bottom: 1.5px solid var(--border); margin-bottom: 12px; }
+.m-tab {
+  padding: 6px 14px; font-size: 12.5px; font-weight: 600;
+  border: none; background: none; cursor: pointer; font-family: inherit;
+  color: var(--t3); border-bottom: 2px solid transparent; margin-bottom: -1.5px; transition: all 0.1s;
+}
+.m-tab.on { color: var(--accent); border-bottom-color: var(--accent); }
+
+.m-ctrl { display: flex; gap: 5px; margin-bottom: 11px; }
+.m-sw {
+  flex: 1; display: flex; align-items: center; gap: 6px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 7px 11px;
+}
+.m-sw svg { width: 13px; height: 13px; color: var(--t3); flex-shrink: 0; }
+.m-sw input { border: none; outline: none; background: transparent; font-size: 13px; font-family: inherit; width: 100%; color: var(--t1); }
+.m-sw input::placeholder { color: var(--t3); }
+.m-cb {
+  display: flex; align-items: center; gap: 3px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 7px 11px;
+  font-size: 12px; color: var(--t2); cursor: pointer; font-family: inherit; white-space: nowrap;
+}
+.m-cb svg { width: 11px; height: 11px; }
+
+.m-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px; }
+.mt {
+  padding: 4px 12px; border-radius: 18px;
+  font-size: 12px; font-weight: 500;
+  border: none; cursor: pointer; font-family: inherit; transition: all 0.1s;
+}
+.mt.on { background: var(--tag-a-bg); color: var(--tag-a-c); }
+.mt:not(.on) { background: var(--tag); color: var(--t2); }
+.mt:not(.on):hover { background: var(--border); }
+
+.m-cnt { font-size: 13px; font-weight: 600; margin-bottom: 12px; }
+.m-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+
+.mc {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 13px; padding: 14px 15px;
+  cursor: pointer; transition: box-shadow 0.13s; position: relative;
+}
+.mc:hover { box-shadow: var(--sh2); }
+.mc-n { position: absolute; top: 11px; right: 13px; font-size: 11px; color: var(--t3); }
+.mc-name { font-size: 15.5px; font-weight: 700; letter-spacing: -0.2px; margin-bottom: 2px; }
+.mc-co { font-size: 12px; color: var(--t2); margin-bottom: 2px; }
+.mc-role { font-size: 12px; font-weight: 600; margin-bottom: 11px; }
+.ro { color: #c04438; }
+.rb { color: #4a7aaa; }
+.rg { color: var(--t2); }
+.mc-con { margin-bottom: 10px; display: flex; flex-direction: column; gap: 3.5px; }
+.mcc {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11.5px; color: var(--t2);
+}
+.mcc svg { width: 11px; height: 11px; flex-shrink: 0; }
+.mcc.ph svg { color: #c04438; }
+.mcc.fx svg { color: var(--t3); }
+.mcc.ml svg { color: var(--t3); }
+.mc-tag {
+  display: inline-block; background: #f5eeec; color: #a04438;
+  border-radius: 5px; padding: 3px 8px; font-size: 11px; font-weight: 500;
+}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<!-- TITLEBAR -->
+<div class="tb">
+  <div style="display:flex;gap:3px;align-items:center;">
+    <button class="tb-ib"><svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.4"><line x1="2" y1="3.5" x2="13" y2="3.5"/><line x1="2" y1="7.5" x2="13" y2="7.5"/><line x1="2" y1="11.5" x2="13" y2="11.5"/></svg></button>
+    <button class="tb-ib"><svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1.5" y="1.5" width="12" height="12" rx="1.5"/></svg></button>
+    <button class="tb-ib" onclick="showS1()"><svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="9.5,2.5 4,7.5 9.5,12.5"/></svg></button>
+    <button class="tb-ib"><svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="5.5,2.5 11,7.5 5.5,12.5"/></svg></button>
+  </div>
+  <div class="tb-tabs">
+    <button class="tb-tab">チャット</button>
+    <button class="tb-tab on">Cowork</button>
+    <button class="tb-tab">コード</button>
+  </div>
+  <div class="tb-right">
+    <button class="win-b">─</button>
+    <button class="win-b">□</button>
+    <button class="win-b">✕</button>
+  </div>
+</div>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <div class="sb">
+    <button class="sb-b"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg></button>
+    <button class="sb-b"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><line x1="10.2" y1="10.2" x2="14" y2="14" stroke-linecap="round"/></svg></button>
+    <button class="sb-b"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="6"/><polyline points="8,5.5 8,8 10,10"/></svg></button>
+    <button class="sb-b"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="7.5" width="11" height="7" rx="1.5"/><path d="M5.5 7.5V5.5a2.5 2.5 0 015 0v2"/></svg></button>
+    <div class="sb-sp"></div>
+    <button class="sb-b" style="color:var(--t3)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="8" y1="2.5" x2="8" y2="13.5"/><polyline points="4,9.5 8,13.5 12,9.5"/></svg></button>
+  </div>
+
+  <div class="sw">
+
+    <!-- ── SCREEN 1 ── -->
+    <div id="s1">
+      <div class="s1-in">
+        <h1 class="s1-h1">タスクを片付けましょう</h1>
+        <p class="s1-sub">Coworkはリサーチプレビュー版です。<a href="#">安全な使用方法を確認する</a>またはフィードバックをお寄せください。</p>
+
+        <div class="ibox">
+          <textarea class="ita" placeholder="本日はどのようなお手伝いをさせていただけますか？" rows="1"
+            oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+          <div class="ifoot">
+            <button class="folder-b">
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1.5 4A1.5 1.5 0 013 2.5h3L7.5 4H13A1.5 1.5 0 0114.5 5.5V11A1.5 1.5 0 0113 12.5H2A1.5 1.5 0 01.5 11V5.5A1.5 1.5 0 012 4z"/></svg>
+              C:\Users\Patch01\Documents\keiriko
+              <span style="font-size:10px;color:var(--t3);margin-left:1px;">▾</span>
+            </button>
+            <div class="idiv"></div>
+            <button class="plus-b">+</button>
+            <button class="model-b">
+              Opus 4.6
+              <svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="2,3.5 5.5,7.5 9,3.5"/></svg>
+            </button>
+            <button class="start-b" onclick="showS2()">
+              始めましょう
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="6" x2="10" y2="6"/><polyline points="7,3 10,6 7,9"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="sec-h">
+          <span class="sec-l">アクティブなタスク</span>
+          <button class="sec-cl">すべてクリア</button>
+        </div>
+
+        <div class="t-row" onclick="showS2()">
+          <div class="t-ico">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M14 9a6 6 0 11-9.5-4.9M2 2v4h4"/></svg>
+          </div>
+          <div>
+            <div class="t-name">Business card management setup</div>
+            <div class="t-time">2 分前</div>
+          </div>
+        </div>
+
+        <div class="rand-row">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 5h14M10 2l5 3-5 3M1 11h14M6 8l-5 3 5 3"/></svg>
+          Pick a task, any task
+        </div>
+
+        <div class="sg-row">
+          <div class="sg-ico"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3.5" width="14" height="13" rx="2"/><line x1="2" y1="7.5" x2="16" y2="7.5"/><line x1="6" y1="1.5" x2="6" y2="5.5"/><line x1="12" y1="1.5" x2="12" y2="5.5"/></svg></div>
+          <span class="sg-name">Optimize my week</span>
+        </div>
+        <div class="sg-row">
+          <div class="sg-ico"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 4A1.5 1.5 0 014 2.5h4l1.5 2H15A1.5 1.5 0 0116.5 6v9A1.5 1.5 0 0115 16.5H3A1.5 1.5 0 011.5 15V5.5A1.5 1.5 0 013 4z"/></svg></div>
+          <span class="sg-name">Organize my screenshots</span>
+        </div>
+        <div class="sg-row">
+          <div class="sg-ico"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="14" height="14" rx="2"/><line x1="2" y1="7" x2="16" y2="7"/><line x1="2" y1="12" x2="16" y2="12"/><line x1="7" y1="2" x2="7" y2="16"/></svg></div>
+          <span class="sg-name">Find insights in files</span>
+        </div>
+
+        <div class="plug-l">プラグインでカスタマイズする</div>
+      </div>
+    </div>
+
+    <!-- ── SCREEN 2 ── -->
+    <div id="s2">
+
+      <div class="cp">
+        <div class="cp-h">
+          Business card management setup
+          <svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="2,3.5 5.5,7.5 9,3.5"/></svg>
+        </div>
+
+        <div class="cp-body" id="cpb">
+          <div class="mu">今日からあなたに名刺管理をお願いしたい</div>
+
+          <div>
+            <button class="ma-link"><svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="2,3.5 5.5,7.5 9,3.5"/></svg>思考プロセス ›</button>
+            <div class="ma-text"><p>ありがとうございます！名刺管理をお任せください。まずはスキルの内容を確認させてください。</p></div>
+          </div>
+
+          <div>
+            <button class="ma-link"><svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="2,3.5 5.5,7.5 9,3.5"/></svg>スキルを使用しました ›</button>
+            <div class="ma-text">
+              <p>おかの社長、こんにちは！右腕太郎です。今日からよろしくお願いします！名刺管理、しっかりサポートしますね。</p>
+              <p>まずは初回セットアップを行います。環境を確認させてください。</p>
+            </div>
+          </div>
+
+          <div>
+            <button class="ma-link"><svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="2,3.5 5.5,7.5 9,3.5"/></svg>5個のコマンドを実行しました ›</button>
+            <div class="ma-text">
+              <p>セットアップ完了しました！状況をまとめます。</p>
+              <p><strong>環境確認結果：</strong></p>
+              <ul>
+                <li>DBファイル（meishi.db）：確認OK、テーブル <span class="ct">cards</span> に <strong>19件</strong>の名刺が登録済み</li>
+                <li>テンプレート（template.html）：確認OK</li>
+                <li>画像フォルダ・スクリプトフォルダ：確認OK</li>
+              </ul>
+              <p>すでに前回までのデータが残っている状態ですね。すぐに使い始められます。</p>
+              <p><strong>できること：</strong></p>
+              <ul>
+                <li>名刺登録 — 名刺画像を送っていただければ読み取って登録します</li>
+                <li>一覧表示 — ブラウザで見やすく表示します</li>
+                <li>検索 — 名前・会社名・タグなどで探せます</li>
+                <li>編集・削除 — IDを指定して情報を更新できます</li>
+              </ul>
+              <p>何からやりましょうか？名刺の画像を送っていただければ、さっそく登録しますよ！</p>
+            </div>
+            <div class="ma-acts">
+              <button class="ma-ab"><svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1.5" y="1.5" width="8" height="10" rx="1.5"/><rect x="5.5" y="4.5" width="8" height="10" rx="1.5"/></svg></button>
+              <button class="ma-ab"><svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M7.5 2l1.5 3.2L13 6l-2.75 2.7.65 3.8L7.5 10.8l-3.4 1.7.65-3.8L2 6l4-.8z"/></svg></button>
+              <button class="ma-ab"><svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M13 4.5l-5 6-3-3"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <button class="scroll-dn" id="sdn" onclick="sDn()">
+          <svg viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="6.5" y1="2" x2="6.5" y2="11"/><polyline points="3,7.5 6.5,11 10,7.5"/></svg>
+        </button>
+
+        <div class="ci">
+          <div class="ci-box">
+            <textarea class="ci-ta" placeholder="返信…" rows="1"
+              oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+            <div class="ci-foot">
+              <button class="ci-plus">+</button>
+              <button class="ci-model">Opus 4.6 <svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="2,3.5 5.5,7.5 9,3.5"/></svg></button>
+              <button class="ci-send"><svg viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="6.5" y1="11" x2="6.5" y2="2"/><polyline points="3,5.5 6.5,2 10,5.5"/></svg></button>
+            </div>
+          </div>
+          <div class="ci-disc">ClaudeはAIであり、誤りが生じる可能性があります。回答内容を再度ご確認ください。フィードバックを送信</div>
+        </div>
+      </div>
+
+      <!-- Preview -->
+      <div class="pp">
+        <div class="pp-h">
+          <div class="pp-tg">
+            <button class="pp-t on"><svg viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 6.5s2.3-4.5 5.5-4.5S12 6.5 12 6.5s-2.3 4.5-5.5 4.5S1 6.5 1 6.5z"/><circle cx="6.5" cy="6.5" r="1.8"/></svg></button>
+            <button class="pp-t"><svg viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="2.5,3.5 1,6.5 2.5,9.5"/><polyline points="10.5,3.5 12,6.5 10.5,9.5"/><line x1="7.5" y1="1.5" x2="5.5" y2="11.5"/></svg></button>
+          </div>
+          <div class="pp-r">
+            <button class="pp-b"><svg viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="1" width="7" height="8.5" rx="1.5"/><rect x="5" y="4.5" width="7" height="8.5" rx="1.5"/></svg></button>
+            <button class="pp-b"><svg viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="1" width="11" height="11" rx="1.5"/></svg></button>
+            <button class="chr-b">
+              <div class="chr-ic"></div>
+              Google Chromeで開く
+            </button>
+            <button class="pp-b"><svg viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 6.5A4.5 4.5 0 112 6.5M11 6.5V3.5M11 6.5H8"/></svg></button>
+            <button class="pp-b"><svg viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="2" y1="2" x2="11" y2="11"/><line x1="11" y1="2" x2="2" y2="11"/></svg></button>
+          </div>
+        </div>
+
+        <div class="mw">
+          <div class="m-top">
+            <div class="m-logo">
+              <div class="m-logo-ic"><svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1.5" y="3.5" width="12" height="9" rx="1.5"/><line x1="4.5" y1="7" x2="10.5" y2="7"/><line x1="4.5" y1="9.5" x2="8.5" y2="9.5"/></svg></div>
+              meishi.
+            </div>
+            <div class="m-meta">19 cards · 8 tags</div>
+          </div>
+
+          <div class="m-tabs">
+            <button class="m-tab on">LIST</button>
+          </div>
+
+          <div class="m-ctrl">
+            <div class="m-sw">
+              <svg viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="5.5" cy="5.5" r="4"/><line x1="8.7" y1="8.7" x2="12" y2="12" stroke-linecap="round"/></svg>
+              <input type="text" placeholder="氏名・会社名・メールで検索…">
+            </div>
+            <button class="m-cb">並び替え <svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.4"><line x1="5.5" y1="1" x2="5.5" y2="10"/><polyline points="3,3.5 5.5,1 8,3.5"/><polyline points="3,7.5 5.5,10 8,7.5"/></svg></button>
+            <button class="m-cb">CSV 出力</button>
+          </div>
+
+          <div class="m-tags">
+            <button class="mt on">すべて</button>
+            <button class="mt">その他</button>
+            <button class="mt">土木</button>
+            <button class="mt">工務店</button>
+            <button class="mt">建材</button>
+            <button class="mt">建設業</button>
+            <button class="mt">測量</button>
+            <button class="mt">設備</button>
+            <button class="mt">設計</button>
+          </div>
+
+          <div class="m-cnt">19 cards</div>
+
+          <div class="m-grid" id="mgrid"></div>
+        </div>
+      </div>
+
+    </div><!-- /s2 -->
+  </div><!-- /sw -->
+</div><!-- /app -->
+
+<script>
+function showS2() {
+  document.getElementById('s1').style.display = 'none';
+  document.getElementById('s2').style.display = 'flex';
+  checkSdn();
+}
+function showS1() {
+  document.getElementById('s2').style.display = 'none';
+  document.getElementById('s1').style.display = 'block';
+}
+function sDn() {
+  var b = document.getElementById('cpb');
+  b.scrollTo({ top: b.scrollHeight, behavior: 'smooth' });
+}
+function checkSdn() {
+  var b = document.getElementById('cpb');
+  var btn = document.getElementById('sdn');
+  if (!b || !btn) return;
+  var atB = b.scrollHeight - b.scrollTop - b.clientHeight < 30;
+  btn.style.opacity = atB ? '0' : '1';
+  btn.style.pointerEvents = atB ? 'none' : 'auto';
+}
+
+var CARDS = [
+  { name:'山田 太郎', co:'株式会社山田建設', role:'部長', roleC:'ro', tag:'建設業' },
+  { name:'田中 花子', co:'有限会社田中工務店', role:'代表取締役', roleC:'ro', tag:'工務店' },
+  { name:'鈴木 一郎', co:'東京建材株式会社', role:'課長', roleC:'rb', tag:'建材' },
+  { name:'佐藤 次郎', co:'佐藤設計事務所', role:'', roleC:'rg', tag:'設計' },
+  { name:'高橋 美咲', co:'高橋測量株式会社', role:'所長', roleC:'ro', tag:'測量' },
+  { name:'伊藤 健太', co:'伊藤設備工業', role:'主任', roleC:'rg', tag:'設備' },
+  { name:'渡辺 裕子', co:'渡辺土木株式会社', role:'係長', roleC:'rb', tag:'土木' },
+  { name:'中村 誠', co:'中村建設コンサルタント', role:'顧問', roleC:'rg', tag:'その他' },
+  { name:'小林 雄介', co:'小林工務店', role:'代表', roleC:'ro', tag:'工務店' },
+  { name:'加藤 真理', co:'加藤設計事務所', role:'主任設計士', roleC:'rb', tag:'設計' },
+  { name:'吉田 浩二', co:'吉田建設株式会社', role:'専務', roleC:'ro', tag:'建設業' },
+  { name:'山本 直樹', co:'山本測量事務所', role:'代表取締役', roleC:'ro', tag:'測量' }
+];
+
+var phSVG = '<svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M1.5 2C1.5 1.7 1.8 1.5 2 1.5h1.2l.9 2.2L3 4.5a6 6 0 002.5 2.5l.8-1.1L8.5 6.8V8c0 .3-.3.5-.5.5C2.5 8.5 1.5 4.2 1.5 2z"/></svg>';
+var fxSVG = '<svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.3"><rect x=".5" y="2.5" width="10" height="7" rx="1"/><rect x="2.5" y="1" width="4" height="2.5" rx=".5"/><line x1="2.5" y1="6" x2="8.5" y2="6"/></svg>';
+var mlSVG = '<svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.3"><rect x=".5" y="2" width="10" height="7" rx="1"/><polyline points=".5,2 5.5,6.5 10.5,2"/></svg>';
+
+document.addEventListener('DOMContentLoaded', function() {
+  var grid = document.getElementById('mgrid');
+  if (!grid) return;
+  var html = '';
+  CARDS.forEach(function(c, i) {
+    html += '<div class="mc">'
+      + '<span class="mc-n">#' + (i+1) + '</span>'
+      + '<div class="mc-name">' + c.name + '</div>'
+      + '<div class="mc-co">' + c.co + '</div>'
+      + '<div class="mc-role ' + c.roleC + '"' + (c.role ? '' : ' style="visibility:hidden"') + '>' + (c.role || '　') + '</div>'
+      + '<div class="mc-con">'
+        + '<div class="mcc ph">' + phSVG + 'XX-XXXX-XXXX</div>'
+        + '<div class="mcc fx">' + fxSVG + '0XX-XXXX-XXXX</div>'
+        + '<div class="mcc ml">' + mlSVG + 'xxxxxx@xxx-xxx.co.jp</div>'
+      + '</div>'
+      + '<span class="mc-tag">' + c.tag + '</span>'
+      + '</div>';
+  });
+  grid.innerHTML = html;
+
+  document.getElementById('cpb').addEventListener('scroll', checkSdn);
+
+  document.querySelectorAll('.mt').forEach(function(t) {
+    t.addEventListener('click', function() {
+      document.querySelectorAll('.mt').forEach(function(x){ x.classList.remove('on'); });
+      t.classList.add('on');
+    });
+  });
+
+  document.querySelectorAll('textarea').forEach(function(ta) {
+    ta.addEventListener('input', function() {
+      ta.style.height = 'auto';
+      ta.style.height = ta.scrollHeight + 'px';
+    });
+  });
+
+  // Typewriter animation
+  var ta = document.querySelector('.ita');
+  var msg = '今日からあなたに名刺管理をお願いしたい。';
+  var i = 0;
+  setTimeout(function type() {
+    if (i <= msg.length) {
+      ta.value = msg.slice(0, i);
+      ta.style.height = 'auto';
+      ta.style.height = ta.scrollHeight + 'px';
+      i++;
+      setTimeout(type, 239);
+    }
+  }, 700);
+
+  // Auto-transition after typing finishes (700 start + 18chars*65ms + 800 pause)
+  setTimeout(showS2, 6300);
+});
+</script>
+</body>
+</html>
