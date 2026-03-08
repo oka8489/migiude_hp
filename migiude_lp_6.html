@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>migiude — チャレンジする、あなたのミギウデ。</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#faf9f6;
+  --bg-alt:#f2f0eb;
+  --text:#1a1a18;
+  --text-secondary:#6b6860;
+  --text-tertiary:#a09d99;
+  --border:#e0ddd6;
+  --accent:#d97757;
+  --accent-hover:#c4684a;
+  --font-main:'Arimo','Noto Sans JP',sans-serif;
+  --max-w:1280px;
+  --header-h:52px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-main);background:var(--bg);color:var(--text);line-height:1.75;-webkit-font-smoothing:antialiased;font-size:14px;}
+a{color:inherit;text-decoration:none}
+
+/* ===== Header ===== */
+.header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  height:var(--header-h);
+  background:rgba(250,249,246,0.94);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
+.header-inner{
+  max-width:var(--max-w);margin:0 auto;padding:0 28px;
+  height:100%;display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;gap:20px;
+}
+.logo{
+  display:flex;align-items:center;
+}
+.logo img{
+  height:48px;
+  transform:scale(0.8);
+  transform-origin:left center;
+  display:block;
+}
+.header-nav{
+  display:flex;gap:24px;align-items:center;justify-content:center;
+}
+.header-nav a{
+  font-family:var(--font-main);
+  font-size:13px;font-weight:500;color:var(--text-secondary);
+  transition:color 0.2s;white-space:nowrap;
+}
+.header-nav a:hover{color:var(--text)}
+.header-actions{
+  display:flex;gap:8px;align-items:center;
+}
+.btn-search{
+  background:var(--bg-alt);border:1px solid var(--border);
+  border-radius:20px;padding:5px 14px;
+  font-family:var(--font-main);
+  font-size:12px;color:var(--text-secondary);cursor:pointer;
+  display:flex;align-items:center;gap:5px;
+}
+.btn-signin{
+  background:var(--text);color:var(--bg);
+  border:none;border-radius:20px;padding:6px 16px;
+  font-family:var(--font-main);
+  font-size:12px;font-weight:600;cursor:pointer;
+  transition:opacity 0.2s;
+}
+.btn-signin:hover{opacity:0.82}
+
+/* ===== Hero ===== */
+.hero{
+  padding-top:0;
+  max-width:var(--max-w);margin:0 auto;
+  padding-left:28px;padding-right:28px;
+  padding-bottom:0;
+}
+.hero-text{
+  padding:6px 0 16px;
+}
+
+.hero h1{
+  font-family:var(--font-main);
+  font-size:clamp(18px,2.2vw,24px);
+  font-weight:700;line-height:1.3;
+  letter-spacing:-0.2px;
+  color:var(--text);
+}
+
+/* ヒーロー画像 */
+.hero-img-wrap{
+  width:100%;
+  border-radius:0;
+  overflow:hidden;
+  border:1px solid var(--border);
+  position:relative;
+  aspect-ratio:16/7.5;
+  background:#f0eee8;
+}
+.hero-img-wrap img{
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:center top;
+  display:block;
+}
+
+
+
+/* ===== Reviews ===== */
+.reviews-section{padding:48px 0;overflow:hidden;}
+.review-card{position:relative;}
+.review-sample-badge{
+  position:absolute;top:12px;right:12px;z-index:2;
+  font-size:10px;font-weight:700;color:var(--text-tertiary);
+  text-transform:uppercase;letter-spacing:1.5px;
+}
+.reviews-section-title{
+  text-align:center;
+  font-size:11px;font-weight:700;color:var(--text-tertiary);
+  text-transform:uppercase;letter-spacing:2px;margin-bottom:28px;
+}
+.reviews-marquee-wrap{
+  display:flex;gap:20px;width:max-content;
+  animation:marquee 32s linear infinite;
+}
+.reviews-marquee-wrap:hover{animation-play-state:paused;}
+@keyframes marquee{
+  0%{transform:translateX(0);}
+  100%{transform:translateX(-50%);}
+}
+.review-card{
+  flex-shrink:0;width:420px;
+  background:#fff;border:1px solid var(--border);
+  border-radius:16px;padding:24px;
+  box-shadow:0 2px 12px rgba(0,0,0,0.05);
+  display:flex;flex-direction:column;gap:16px;
+}
+.review-header{
+  display:flex;align-items:center;gap:20px;
+}
+.review-avatar{
+  width:100px;height:100px;border-radius:10px;object-fit:cover;flex-shrink:0;
+  background:#e8e4db;
+}
+.review-meta{}
+.review-name{
+  font-size:15px;font-weight:700;color:var(--text-primary);letter-spacing:0.2px;
+}
+.review-role{
+  font-size:12px;color:var(--text-tertiary);margin-top:4px;
+}
+.review-body{
+  font-size:12.5px;color:var(--text-secondary);line-height:1.8;
+}
+
+/* ===== Target ===== */
+.target-section{
+  padding:52px 28px;
+  max-width:var(--max-w);margin:0 auto;
+}
+.target-eyebrow{
+  font-size:11px;font-weight:700;color:var(--accent);
+  text-transform:uppercase;letter-spacing:2px;margin-bottom:3px;
+}
+.target-title{
+  font-family:var(--font-main);
+  font-size:clamp(18px,2.2vw,24px);
+  font-weight:700;letter-spacing:-0.2px;margin-bottom:6px;
+}
+.target-desc{
+  font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:20px;
+}
+.target-block{
+  background:var(--bg-alt);border:1px solid var(--border);
+  border-radius:14px;padding:24px;margin-bottom:14px;
+  display:grid;align-items:center;gap:18px;
+}
+.target-block-a{grid-template-columns:140px 1fr;}
+.target-block-b{grid-template-columns:1fr 150px;}
+.target-demo-side{display:flex;flex-direction:column;gap:8px;}
+.target-demo-side h4{font-size:13px;font-weight:700;color:var(--text);line-height:1.5;margin-bottom:2px;}
+.target-demo-btn{background:#fff;border:1px solid var(--border);border-radius:20px;padding:8px 14px;font-size:12px;color:var(--text-secondary);cursor:pointer;text-align:left;font-family:var(--font-main);transition:border-color 0.2s,color 0.2s;}
+.target-demo-btn:hover{border-color:var(--accent);color:var(--text)}
+.target-demo-panel{background:#fff;border:1px solid var(--border);border-radius:10px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text-tertiary);}
+.target-label{
+  font-family:var(--font-main);
+  font-size:14px;font-weight:700;line-height:1.6;color:var(--text);
+  text-align:center;
+}
+.target-video{
+  background:#fff;border:1px solid var(--border);
+  border-radius:10px;aspect-ratio:16/9;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;color:var(--text-tertiary);text-align:center;padding:12px;
+  line-height:1.5;
+}
+
+/* ===== Steps ===== */
+.steps-section{background:var(--bg-alt);padding:52px 28px;}
+.steps-inner{max-width:var(--max-w);margin:0 auto;}
+.steps-header{text-align:center;margin-bottom:40px;}
+.steps-eyebrow{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:2px;margin-bottom:5px;}
+.steps-title{font-family:var(--font-main);font-size:clamp(17px,2.2vw,24px);font-weight:700;letter-spacing:-0.2px;margin-bottom:6px;}
+.steps-desc{font-size:12px;color:var(--text-secondary);}
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;position:relative;}
+.steps-grid::before{content:'';position:absolute;top:21px;left:16%;right:16%;height:1px;background:var(--border);z-index:0;}
+.step{text-align:center;position:relative;z-index:1;}
+.step-num{width:42px;height:42px;border-radius:50%;background:var(--bg);border:1.5px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--accent);margin:0 auto 12px;}
+.step h3{font-size:13px;font-weight:700;margin-bottom:5px;}
+.step p{font-size:12px;color:var(--text-secondary);line-height:1.65;}
+
+/* ===== FAQ ===== */
+.faq-section{padding:52px 28px;}
+.faq-inner{max-width:var(--max-w);margin:0 auto;}
+.faq-eyebrow{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:2px;margin-bottom:3px;}
+.faq-title{font-family:var(--font-main);font-size:clamp(17px,2.2vw,24px);font-weight:700;letter-spacing:-0.2px;margin-bottom:24px;}
+.faq-list{max-width:640px;}
+.faq-item{border-bottom:1px solid var(--border);}
+.faq-q{width:100%;background:none;border:none;color:var(--text);font-family:var(--font-main);font-size:13px;font-weight:500;padding:17px 0;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;}
+.faq-q:hover{color:var(--accent)}
+.faq-arrow{width:18px;height:18px;flex-shrink:0;transition:transform 0.3s;color:var(--text-tertiary);}
+.faq-q.active .faq-arrow{transform:rotate(180deg);color:var(--accent)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height 0.35s ease,padding-bottom 0.35s ease;}
+.faq-a.open{max-height:200px;padding-bottom:17px}
+.faq-a p{font-size:12px;color:var(--text-secondary);line-height:1.8;}
+
+/* ===== CTA ===== */
+.cta-section{padding:72px 28px;text-align:center;background:var(--bg);}
+.cta-inner{max-width:460px;margin:0 auto;}
+.cta-eyebrow{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;}
+.cta-title{
+  font-family:var(--font-main);
+  font-size:clamp(26px,4.5vw,46px);
+  font-weight:700;line-height:1.2;
+  letter-spacing:-0.8px;margin-bottom:10px;
+}
+.cta-desc{font-size:13px;color:var(--text-secondary);margin-bottom:22px;}
+.register-form{display:flex;gap:8px;max-width:380px;margin:0 auto;}
+.register-form input{flex:1;padding:11px 18px;background:var(--bg);border:1.5px solid var(--border);border-radius:999px;color:var(--text);font-size:13px;font-family:var(--font-main);outline:none;transition:border-color 0.2s;}
+.register-form input::placeholder{color:var(--text-tertiary)}
+.register-form input:focus{border-color:var(--accent)}
+.btn-register{background:var(--accent);color:#fff;border:none;border-radius:999px;padding:11px 20px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:var(--font-main);transition:background 0.2s;}
+.btn-register:hover{background:var(--accent-hover)}
+
+/* ===== Footer ===== */
+.footer{border-top:1px solid var(--border);padding:28px;}
+.footer-inner{max-width:var(--max-w);margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+.footer-links{display:flex;gap:18px;flex-wrap:wrap;}
+.footer-links a{font-size:12px;color:var(--text-tertiary);transition:color 0.2s;}
+.footer-links a:hover{color:var(--text)}
+.footer-copy{font-size:12px;color:var(--text-tertiary);}
+
+.hero-eyebrow{
+  font-size:11px;font-weight:700;color:var(--accent);
+  letter-spacing:1.5px;margin-bottom:6px;
+}
+
+.hero-logo-overlay{
+  position:absolute;
+  top:50%;left:50%;transform:translate(-50%,-50%) scale(0.8);
+  width:18%;
+  pointer-events:none;
+}
+.hero-logo-overlay img{
+  width:100%;height:auto;display:block;
+}
+/* ===== Anim ===== */
+.fade-up{opacity:0;transform:translateY(18px);transition:opacity 0.6s ease,transform 0.6s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:768px){
+  .header-inner{grid-template-columns:auto 1fr auto;}
+  .header-nav{display:none}
+  .target-block-a,.target-block-b{grid-template-columns:1fr;}
+  .target-block-b .target-label{order:2}
+  .target-block-b .target-video{order:1}
+  .steps-grid{grid-template-columns:1fr;gap:20px;}
+  .steps-grid::before{display:none}
+  .register-form{flex-direction:column}
+  .footer-inner{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <img src="assets/logo01.png" alt="migiude">
+    </div>
+    <nav class="header-nav">
+      <a href="#target">スキル・プラグイン</a>
+      <a href="#steps">プラン</a>
+      <a href="#faq">リソース</a>
+    </nav>
+    <div class="header-actions">
+      <button class="btn-search">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        検索
+      </button>
+      <button class="btn-signin">サインイン</button>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<section style="padding-top:var(--header-h);background:var(--bg)">
+  <div class="hero">
+    <div class="hero-text fade-up">
+      <p class="hero-eyebrow">Say hello to migiude</p>
+      <h1>チャレンジする、あなたのミギウデ。</h1>
+    </div>
+    <div class="hero-img-wrap fade-up" style="position:relative;">
+      <img src="assets/hero.png" alt="migiude ヒーロー画像" loading="eager"
+           srcset="assets/hero-400.png 400w, assets/hero-800.png 800w, assets/hero.png 1280w"
+           sizes="(max-width: 600px) 400px, (max-width: 900px) 800px, 1280px">
+      <div class="hero-logo-overlay"><img src="assets/logo02.png" alt="migiude"></div>
+        ここにスキルが稼働する動画
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 口コミ -->
+<section class="reviews-section">
+  <div style="overflow:hidden;">
+    <div class="reviews-marquee-wrap" id="reviewsMarquee">
+
+      <div class="review-card">
+        <span class="review-sample-badge">Sample</span>
+        <div class="review-header">
+          <img class="review-avatar" src="assets/profile4.png" alt="田中次郎" loading="lazy">
+          <div class="review-meta">
+            <div class="review-name">田中次郎</div>
+            <div class="review-role">薬局経営</div>
+          </div>
+        </div>
+        <div class="review-body">在庫管理から請求書の作成まで、migiudeがまるごとサポートしてくれます。スタッフへの説明も「AIに聞いて」で済むようになり、現場がぐっと楽になりました。</div>
+      </div>
+
+      <div class="review-card">
+        <span class="review-sample-badge">Sample</span>
+        <div class="review-header">
+          <img class="review-avatar" src="assets/profile5.png" alt="佐藤花子" loading="lazy">
+          <div class="review-meta">
+            <div class="review-name">佐藤花子</div>
+            <div class="review-role">カフェ経営</div>
+          </div>
+        </div>
+        <div class="review-body">毎月の帳簿作業が憂鬱だったのですが、keirikoプラグインを入れてから仕訳の大半を任せられるようになりました。税理士に見せる資料の質も上がったと褒められました。</div>
+      </div>
+
+      <div class="review-card">
+        <span class="review-sample-badge">Sample</span>
+        <div class="review-header">
+          <img class="review-avatar" src="assets/profile3.png" alt="鈴木一郎" loading="lazy">
+          <div class="review-meta">
+            <div class="review-name">鈴木一郎</div>
+            <div class="review-role">フリーランス</div>
+          </div>
+        </div>
+        <div class="review-body">Claude Codeとmigiudeの組み合わせが最高です。コードレビューだけでなく、見積もり書や請求書まで一気通貫で作れるのは他にないと思います。</div>
+      </div>
+
+      <div class="review-card">
+        <span class="review-sample-badge">Sample</span>
+        <div class="review-header">
+          <img class="review-avatar" src="assets/profile1.png" alt="岡本英二" loading="lazy">
+          <div class="review-meta">
+            <div class="review-name">岡本英二</div>
+            <div class="review-role">システムエンジニア</div>
+          </div>
+        </div>
+        <div class="review-body">導入前は業務の自動化に別のツールを組み合わせていましたが、migiudeに切り替えてから管理コストが激減しました。スキル追加も簡単で継続して使えています。</div>
+      </div>
+
+      <div class="review-card">
+        <span class="review-sample-badge">Sample</span>
+        <div class="review-header">
+          <img class="review-avatar" src="assets/profile2.png" alt="斎藤京子" loading="lazy">
+          <div class="review-meta">
+            <div class="review-name">斎藤京子</div>
+            <div class="review-role">WEBデザイナー</div>
+          </div>
+        </div>
+        <div class="review-body">SNS投稿のアイデア出しから文章の仕上げまで、テンプレートがそのまま使えて助かっています。毎週の発信が苦じゃなくなりました。</div>
+      </div>
+
+      <div class="review-card">
+        <span class="review-sample-badge">Sample</span>
+        <div class="review-header">
+          <img class="review-avatar" src="assets/profile4.png" alt="田中次郎" loading="lazy">
+          <div class="review-meta">
+            <div class="review-name">田中次郎</div>
+            <div class="review-role">薬局経営</div>
+          </div>
+        </div>
+        <div class="review-body">在庫管理から請求書の作成まで、migiudeがまるごとサポートしてくれます。スタッフへの説明も「AIに聞いて」で済むようになり、現場がぐっと楽になりました。</div>
+      </div>
+
+      <div class="review-card">
+        <span class="review-sample-badge">Sample</span>
+        <div class="review-header">
+          <img class="review-avatar" src="assets/profile5.png" alt="佐藤花子" loading="lazy">
+          <div class="review-meta">
+            <div class="review-name">佐藤花子</div>
+            <div class="review-role">カフェ経営</div>
+          </div>
+        </div>
+        <div class="review-body">毎月の帳簿作業が憂鬱だったのですが、keirikoプラグインを入れてから仕訳の大半を任せられるようになりました。税理士に見せる資料の質も上がったと褒められました。</div>
+      </div>
+
+      <div class="review-card">
+        <span class="review-sample-badge">Sample</span>
+        <div class="review-header">
+          <img class="review-avatar" src="assets/profile3.png" alt="鈴木一郎" loading="lazy">
+          <div class="review-meta">
+            <div class="review-name">鈴木一郎</div>
+            <div class="review-role">フリーランス</div>
+          </div>
+        </div>
+        <div class="review-body">Claude Codeとmigiudeの組み合わせが最高です。コードレビューだけでなく、見積もり書や請求書まで一気通貫で作れるのは他にないと思います。</div>
+      </div>
+
+      <div class="review-card">
+        <span class="review-sample-badge">Sample</span>
+        <div class="review-header">
+          <img class="review-avatar" src="assets/profile1.png" alt="岡本英二" loading="lazy">
+          <div class="review-meta">
+            <div class="review-name">岡本英二</div>
+            <div class="review-role">システムエンジニア</div>
+          </div>
+        </div>
+        <div class="review-body">導入前は業務の自動化に別のツールを組み合わせていましたが、migiudeに切り替えてから管理コストが激減しました。スキル追加も簡単で継続して使えています。</div>
+      </div>
+
+      <div class="review-card">
+        <span class="review-sample-badge">Sample</span>
+        <div class="review-header">
+          <img class="review-avatar" src="assets/profile2.png" alt="斎藤京子" loading="lazy">
+          <div class="review-meta">
+            <div class="review-name">斎藤京子</div>
+            <div class="review-role">WEBデザイナー</div>
+          </div>
+        </div>
+        <div class="review-body">SNS投稿のアイデア出しから文章の仕上げまで、テンプレートがそのまま使えて助かっています。毎週の発信が苦じゃなくなりました。</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ターゲット別 -->
+<section class="target-section" id="target">
+  <div class="fade-up">
+    <div class="target-eyebrow" style="text-transform:none">with Claude</div>
+    <h2 class="target-title">仕事を指示してください。</h2>
+    <p class="target-desc">あなたの仕事を手伝うのではなく、あなたの代わりに仕事をします。</p>
+  </div>
+  <div class="target-block target-block-a fade-up">
+    <div class="target-demo-side">
+      <h4>フリーランス<br>個人事業主</h4>
+      <button type="button" class="target-demo-btn">名刺管理</button>
+      <button type="button" class="target-demo-btn">確定申告</button>
+      <button type="button" class="target-demo-btn">HP作成・管理</button>
+      <button type="button" class="target-demo-btn">ライブラリ</button>
+    </div>
+    <div class="target-demo-panel">
+      <div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 7px;display:block;color:var(--text-tertiary)"><polygon points="5,3 19,12 5,21"/></svg>
+        ここにスキルが稼働する静止画
+      </div>
+    </div>
+  </div>
+  <div class="target-block target-block-b fade-up">
+    <div class="target-video">
+      <div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 7px;display:block;color:var(--text-tertiary)"><polygon points="5,3 19,12 5,21"/></svg>
+        ここにスキルが稼働する静止画
+      </div>
+    </div>
+    <div class="target-label">小規模事業者</div>
+  </div>
+</section>
+
+<!-- Steps -->
+<section class="steps-section" id="steps">
+  <div class="steps-inner">
+    <div class="steps-header fade-up">
+      <div class="steps-eyebrow">How it works</div>
+      <h2 class="steps-title">3ステップで始められる</h2>
+      <p class="steps-desc">複雑な設定は不要。登録してすぐに使い始められます。</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step fade-up">
+        <div class="step-num">1</div>
+        <h3>無料で会員登録</h3>
+        <p>メールアドレスだけでOK。<br>30秒で完了します。</p>
+      </div>
+      <div class="step fade-up">
+        <div class="step-num">2</div>
+        <h3>プラグインをインストール</h3>
+        <p>ワンクリックでClaude環境に<br>migiudeを追加。</p>
+      </div>
+      <div class="step fade-up">
+        <div class="step-num">3</div>
+        <h3>即座に体験</h3>
+        <p>設定不要で自動的に有効化。<br>すぐに効果を実感できます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" id="faq">
+  <div class="faq-inner">
+    <div class="fade-up">
+      <div class="faq-eyebrow">FAQ</div>
+      <h2 class="faq-title">よくある質問</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item fade-up">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          migiudeとは何ですか？
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>migiudeはClaude向けのスキル・プラグインです。Claudeに業種別の専門知識を注入し、フリーランスや小規模事業者の日常業務を自動化・効率化します。</p></div>
+      </div>
+      <div class="faq-item fade-up">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          現在β版とのことですが、いつ販売開始ですか？
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>現在β版を開発中です。販売開始時期は未定ですが、事前登録いただいた方にはリリース情報をいち早くお届けします。</p></div>
+      </div>
+      <div class="faq-item fade-up">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          既存のClaude環境にそのまま使えますか？
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>はい。Claude.aiやClaude Codeなど、既存のClaude環境にプラグインとして追加するだけで使い始められます。別途ツールは不要です。</p></div>
+      </div>
+      <div class="faq-item fade-up">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          データのセキュリティは大丈夫ですか？
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>通信は全て暗号化され、データはお客様の環境内でのみ処理されます。安心してご利用ください。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="register">
+  <div class="cta-inner fade-up">
+    <div class="cta-eyebrow">Coming Soon</div>
+    <h2 class="cta-title">今すぐ、migiudeを試す。</h2>
+    <p class="cta-desc">メールアドレスを登録して、migiudeを無料で始めましょう</p>
+    <form class="register-form" onsubmit="handleRegister(event)">
+      <input type="email" placeholder="メールアドレス" required>
+      <button type="submit" class="btn-register">登録する</button>
+    </form>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a href="#">製品</a>
+      <a href="#">リソース</a>
+      <a href="#">会社情報</a>
+      <a href="#">法律</a>
+      <a href="#">検索</a>
+    </div>
+    <div class="footer-copy">&copy; 2026 migiude. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})
+},{threshold:0.08});
+document.querySelectorAll('.fade-up').forEach(el=>observer.observe(el));
+function toggleFaq(btn){
+  const a=btn.nextElementSibling;const open=a.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(x=>x.classList.remove('open'));
+  document.querySelectorAll('.faq-q').forEach(x=>x.classList.remove('active'));
+  if(!open){a.classList.add('open');btn.classList.add('active')}
+}
+function handleRegister(e){
+  e.preventDefault();
+  const email=e.target.querySelector('input').value;
+  alert('事前登録ありがとうございます！\n'+email+' 宛にリリース情報をお送りします。');
+  e.target.reset();
+}
+</script>
+</body>
+</html>
