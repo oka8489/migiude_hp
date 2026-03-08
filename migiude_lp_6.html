@@ -84,7 +84,7 @@ a{color:inherit;text-decoration:none}
   padding-bottom:0;
 }
 .hero-text{
-  padding:6px 0 16px;
+  padding:24px 0 16px;
 }
 
 .hero h1{
@@ -163,7 +163,7 @@ a{color:inherit;text-decoration:none}
 
 /* ===== Target ===== */
 .target-section{
-  padding:52px 28px;
+  padding:92px 28px 52px;
   max-width:var(--max-w);margin:0 auto;
 }
 .target-eyebrow{
@@ -180,28 +180,16 @@ a{color:inherit;text-decoration:none}
 }
 .target-block{
   background:var(--bg-alt);border:1px solid var(--border);
-  border-radius:14px;padding:24px;margin-bottom:14px;
-  display:grid;align-items:center;gap:18px;
+  border-radius:14px;padding:40px;margin-bottom:40px;
+  display:grid;align-items:start;gap:18px;
 }
-.target-block-a{grid-template-columns:140px 1fr;}
-.target-block-b{grid-template-columns:1fr 150px;}
-.target-demo-side{display:flex;flex-direction:column;gap:8px;}
-.target-demo-side h4{font-size:13px;font-weight:700;color:var(--text);line-height:1.5;margin-bottom:2px;}
-.target-demo-btn{background:#fff;border:1px solid var(--border);border-radius:20px;padding:8px 14px;font-size:12px;color:var(--text-secondary);cursor:pointer;text-align:left;font-family:var(--font-main);transition:border-color 0.2s,color 0.2s;}
+.target-block-a{grid-template-columns:170px 1fr;}
+.target-block-b{grid-template-columns:1fr 170px;}
+.target-demo-side{display:flex;flex-direction:column;gap:12px;align-items:center;}
+.target-demo-side h4{font-size:15px;font-weight:700;color:var(--text);line-height:1.5;margin-bottom:2px;text-align:center;}
+.target-demo-btn{width:100%;background:#fff;border:1px solid var(--border);border-radius:20px;padding:8px 14px;font-size:12px;color:var(--text-secondary);cursor:pointer;text-align:center;font-family:var(--font-main);transition:border-color 0.2s,color 0.2s;}
 .target-demo-btn:hover{border-color:var(--accent);color:var(--text)}
-.target-demo-panel{background:#fff;border:1px solid var(--border);border-radius:10px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text-tertiary);}
-.target-label{
-  font-family:var(--font-main);
-  font-size:14px;font-weight:700;line-height:1.6;color:var(--text);
-  text-align:center;
-}
-.target-video{
-  background:#fff;border:1px solid var(--border);
-  border-radius:10px;aspect-ratio:16/9;
-  display:flex;align-items:center;justify-content:center;
-  font-size:12px;color:var(--text-tertiary);text-align:center;padding:12px;
-  line-height:1.5;
-}
+.target-demo-panel{background:#fff;border:1px solid var(--border);border-radius:14px;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text-tertiary);}
 
 /* ===== Steps ===== */
 .steps-section{background:var(--bg-alt);padding:52px 28px;}
@@ -220,9 +208,9 @@ a{color:inherit;text-decoration:none}
 /* ===== FAQ ===== */
 .faq-section{padding:52px 28px;}
 .faq-inner{max-width:var(--max-w);margin:0 auto;}
-.faq-eyebrow{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:2px;margin-bottom:3px;}
-.faq-title{font-family:var(--font-main);font-size:clamp(17px,2.2vw,24px);font-weight:700;letter-spacing:-0.2px;margin-bottom:24px;}
-.faq-list{max-width:640px;}
+.faq-eyebrow{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:2px;margin-bottom:3px;text-align:center;}
+.faq-title{font-family:var(--font-main);font-size:clamp(17px,2.2vw,24px);font-weight:700;letter-spacing:-0.2px;margin-bottom:24px;text-align:center;}
+.faq-list{max-width:640px;margin:0 auto;}
 .faq-item{border-bottom:1px solid var(--border);}
 .faq-q{width:100%;background:none;border:none;color:var(--text);font-family:var(--font-main);font-size:13px;font-weight:500;padding:17px 0;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;}
 .faq-q:hover{color:var(--accent)}
@@ -280,8 +268,8 @@ a{color:inherit;text-decoration:none}
   .header-inner{grid-template-columns:auto 1fr auto;}
   .header-nav{display:none}
   .target-block-a,.target-block-b{grid-template-columns:1fr;}
-  .target-block-b .target-label{order:2}
-  .target-block-b .target-video{order:1}
+  .target-block-b .target-demo-panel{order:1}
+  .target-block-b .target-demo-side{order:2}
   .steps-grid{grid-template-columns:1fr;gap:20px;}
   .steps-grid::before{display:none}
   .register-form{flex-direction:column}
@@ -474,21 +462,17 @@ a{color:inherit;text-decoration:none}
       <button type="button" class="target-demo-btn">HP作成・管理</button>
       <button type="button" class="target-demo-btn">ライブラリ</button>
     </div>
-    <div class="target-demo-panel">
-      <div>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 7px;display:block;color:var(--text-tertiary)"><polygon points="5,3 19,12 5,21"/></svg>
-        ここにスキルが稼働する静止画
-      </div>
-    </div>
+    <div class="target-demo-panel"></div>
   </div>
   <div class="target-block target-block-b fade-up">
-    <div class="target-video">
-      <div>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 7px;display:block;color:var(--text-tertiary)"><polygon points="5,3 19,12 5,21"/></svg>
-        ここにスキルが稼働する静止画
-      </div>
+    <div class="target-demo-panel"></div>
+    <div class="target-demo-side">
+      <h4>小規模法人</h4>
+      <button type="button" class="target-demo-btn">名刺管理</button>
+      <button type="button" class="target-demo-btn">経理</button>
+      <button type="button" class="target-demo-btn">HP作成・管理</button>
+      <button type="button" class="target-demo-btn">ライブラリ</button>
     </div>
-    <div class="target-label">小規模事業者</div>
   </div>
 </section>
 
@@ -497,8 +481,8 @@ a{color:inherit;text-decoration:none}
   <div class="steps-inner">
     <div class="steps-header fade-up">
       <div class="steps-eyebrow">How it works</div>
-      <h2 class="steps-title">3ステップで始められる</h2>
-      <p class="steps-desc">複雑な設定は不要。登録してすぐに使い始められます。</p>
+      <h2 class="steps-title">3ステップで始められる。</h2>
+      <p class="steps-desc">複雑な設定は不要、登録してすぐに使い始められます</p>
     </div>
     <div class="steps-grid">
       <div class="step fade-up">
@@ -509,12 +493,12 @@ a{color:inherit;text-decoration:none}
       <div class="step fade-up">
         <div class="step-num">2</div>
         <h3>プラグインをインストール</h3>
-        <p>ワンクリックでClaude環境に<br>migiudeを追加。</p>
+        <p>インストール後Claude環境に<br>migiudeを追加</p>
       </div>
       <div class="step fade-up">
         <div class="step-num">3</div>
         <h3>即座に体験</h3>
-        <p>設定不要で自動的に有効化。<br>すぐに効果を実感できます。</p>
+        <p>まずは使ってみて、<br>分からないところを聞いてください。</p>
       </div>
     </div>
   </div>
